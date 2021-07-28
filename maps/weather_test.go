@@ -136,6 +136,63 @@ func Example_weatherOperations() {
 	}
 	log.Println(string(jsonResp))
 
+	airQualityResp, err := weatherClient.GetCurrentAirQuality(ctx, weather.ResponseFormatJSON, "47.632346,-122.138874", &weather.WeatherGetCurrentAirQualityOptions{
+		Language:   to.StringPtr("EN"),
+		Pollutants: to.BoolPtr(true),
+	})
+	if err != nil {
+		util.LogAndPanic(err)
+	}
+	util.PrintAndLog("retrieved current air quality")
+	jsonResp, jsonErr = airQualityResp.CurrentAirQualityResponse.MarshalJSON()
+	if jsonErr != nil {
+		util.LogAndPanic(jsonErr)
+	}
+	log.Println(string(jsonResp))
+
+	airQualityHourResp, err := weatherClient.GetAirQualityHourlyForecast(ctx, weather.ResponseFormatJSON, "47.632346,-122.138874", &weather.WeatherGetAirQualityHourlyForecastOptions{
+		Duration:   to.Int32Ptr(12),
+		Language:   to.StringPtr("EN"),
+		Pollutants: to.BoolPtr(true),
+	})
+	if err != nil {
+		util.LogAndPanic(err)
+	}
+	util.PrintAndLog("retrieved hourly air quality forecast")
+	jsonResp, jsonErr = airQualityHourResp.HourlyAirQualityForecastResponse.MarshalJSON()
+	if jsonErr != nil {
+		util.LogAndPanic(jsonErr)
+	}
+	log.Println(string(jsonResp))
+
+	airQualityDailyResp, err := weatherClient.GetAirQualityDailyForecast(ctx, weather.ResponseFormatJSON, "47.632346,-122.138874", &weather.WeatherGetAirQualityDailyForecastOptions{
+		Duration: to.Int32Ptr(3),
+		Language: to.StringPtr("EN"),
+	})
+	if err != nil {
+		util.LogAndPanic(err)
+	}
+	util.PrintAndLog("retrieved daily air quality forecast")
+	jsonResp, jsonErr = airQualityDailyResp.DailyAirQualityForecastResponse.MarshalJSON()
+	if jsonErr != nil {
+		util.LogAndPanic(jsonErr)
+	}
+	log.Println(string(jsonResp))
+
+	// climoSummaryResp, err := weatherClient.GetClimoSummary(ctx, weather.ResponseFormatJSON, "39.952583,-75.165222", "2014/02", &weather.WeatherGetClimoSummaryOptions{
+	// 	Language: to.StringPtr("EN"),
+	// 	Unit:     weather.WeatherDataUnitMetric.ToPtr(),
+	// })
+	// if err != nil {
+	// 	util.LogAndPanic(err)
+	// }
+	// util.PrintAndLog("retrieved climo summary")
+	// jsonResp, jsonErr = json.Marshal(climoSummaryResp.WeatherGetClimoSummaryResult)
+	// if jsonErr != nil {
+	// 	util.LogAndPanic(jsonErr)
+	// }
+	// log.Println(string(jsonResp))
+
 	// Output:
 	// retrieved current weather conditions
 	// retrieved daily weather forecast
@@ -145,4 +202,7 @@ func Example_weatherOperations() {
 	// retrieved quarter day forecast
 	// retrieved severe weather alerts
 	// retrieved weather along route
+	// retrieved current air quality
+	// retrieved hourly air quality forecast
+	// retrieved daily air quality forecast
 }
